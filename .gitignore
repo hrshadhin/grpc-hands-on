@@ -1,0 +1,5 @@
+**/vendor/**
+**/venv/**
+**/__pycache__/**
+**/.vscode/**
+**/.idea/**
