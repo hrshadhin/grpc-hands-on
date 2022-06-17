@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  recommendations:
+    build:
+      context: .
+      dockerfile: recommendations/Dockerfile
+    image: recommendations
+    networks:
+      - bookworm
+
+  marketplace:
+    build:
+      context: .
+      dockerfile: marketplace/Dockerfile
+    image: marketplace
+    volumes:
+      - ./marketplace:/service/marketplace
+    environment:
+      - FLASK_DEBUG=1
+      - RECOMMENDATIONS_ADDR=recommendations:50051
+    ports:
+      - "5000:5000"
+    networks:
+      - bookworm
+
+networks:
+  bookworm:
