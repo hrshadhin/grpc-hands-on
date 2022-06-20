@@ -2,6 +2,7 @@ from concurrent import futures
 import os
 import random
 import logging
+from signal import signal, SIGTERM
 
 import grpc
 from recommendations_pb2 import BookCategory, BookRecommendation, RecommendationResponse
@@ -57,6 +58,14 @@ def serve():
     recommendations_pb2_grpc.add_RecommendationsServicer_to_server(RecommendationService(), server)
     server.add_insecure_port(f"[::]:{GRPC_PORT}")
     server.start()
+
+    def handle_sigterm(*_):
+        logging.info("Received shutdown signal")
+        all_rpcs_done_event = server.stop(30)
+        all_rpcs_done_event.wait(30)
+        logging.info("Shut down gracefully")
+
+    signal(SIGTERM, handle_sigterm)
     server.wait_for_termination()
 
 

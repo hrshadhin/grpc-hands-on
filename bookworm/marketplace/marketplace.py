@@ -15,7 +15,7 @@ recommendations_client = RecommendationsStub(recommendations_channel)
 
 @app.route("/")
 def render_homepage():
-    recommendations_request = RecommendationRequest(user_id=1, category=BookCategory.SELF_HELP, max_results=3)
+    recommendations_request = RecommendationRequest(user_id=1, category=BookCategory.MYSTERY, max_results=3)
     recommendations_response = recommendations_client.Recommend(recommendations_request)
     return render_template(
         "home.html",
